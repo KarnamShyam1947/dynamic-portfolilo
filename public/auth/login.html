@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AdminLTE 2 | Data Tables</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link href="./../assets/css/bootstrap.min.admin.css" rel="stylesheet" type="text/css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css">
+    <!-- <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css"> -->
+    <link href="./../assets/css/AdminLTE.css" rel="stylesheet" type="text/css">
+    <link href="./../assets/css/skins/skin-blue.css" rel="stylesheet" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.15.10/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.15.10/dist/sweetalert2.min.css">
+
+</head>
+
+<body class="skin-blue login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="../../index2.html">Dynamic <b>Portfolio</b></a>
+        </div><!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">Sign in to start your session</p>
+            <form id="form" action="../../index2.html" >
+                <div class="form-group has-feedback">
+                    <input id="username" type="text" class="form-control" placeholder="Email" />
+                </div>
+                <div class="form-group has-feedback">
+                    <input id="password" type="password" class="form-control" placeholder="Password" />
+                </div>
+                <button  type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+            </form>
+
+        </div><!-- /.login-box-body -->
+    </div>
+
+    <script>
+        let form = document.getElementById("form");
+        form.onsubmit = (e) => {
+            e.preventDefault();
+
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+            let details = {
+                    "username" : username,
+                    "password" : password
+                };
+            console.log(details);
+                
+            fetch("/api/auth/login", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify(details)
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                if (data.error) {
+                    Swal.fire ({
+                        title: "Error",
+                        icon: "error",
+                        text: data.error
+                    })
+                }
+                else {
+                    Swal.fire ({
+                        title: "Success",
+                        icon: "success",
+                        text: data.message
+                    })
+                    .then(() => {
+                            window.location.href = '/admin/add-project'; // Redirect to login page
+                        
+                    })
+                }
+            
+            })
+            .catch(error => console.log(error))
+
+        }
+    </script>
+
+</body>
+
+</html>
